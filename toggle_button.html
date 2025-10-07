@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day Night Toggle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+
+        /* Toggle Button */
+        .toggle-container {
+            position: relative;
+            z-index: 100;
+        }
+
+        .toggle {
+            width: 280px;
+            height: 140px;
+            border: none;
+            border-radius: 70px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to bottom, #87CEEB 0%, #98D8E8 30%, #F0E68C 70%, #F4A460 100%);
+        }
+
+        .toggle.night {
+            background: linear-gradient(to bottom, #0F0F23 0%, #1A1A2E 30%, #16213E 70%, #0F3460 100%);
+        }
+
+        .toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Stars inside toggle */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        .toggle.night .star {
+            opacity: 1;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        /* Clouds inside toggle */
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            opacity: 1;
+            transition: all 0.8s ease;
+            animation: floatInside 15s infinite linear;
+        }
+
+        .toggle.night .cloud {
+            background: rgba(70, 70, 90, 0.3);
+            opacity: 0.6;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: 50px;
+        }
+
+        .cloud1 {
+            width: 40px;
+            height: 15px;
+            top: 25%;
+            left: -50px;
+        }
+
+        .cloud1::before {
+            width: 25px;
+            height: 25px;
+            top: -12px;
+            left: 5px;
+        }
+
+        .cloud1::after {
+            width: 30px;
+            height: 20px;
+            top: -7px;
+            right: 5px;
+        }
+
+        .cloud2 {
+            width: 30px;
+            height: 12px;
+            top: 60%;
+            left: -40px;
+            animation-delay: -7s;
+        }
+
+        .cloud2::before {
+            width: 20px;
+            height: 20px;
+            top: -10px;
+            left: 3px;
+        }
+
+        .cloud2::after {
+            width: 22px;
+            height: 15px;
+            top: -5px;
+            right: 4px;
+        }
+
+        @keyframes floatInside {
+            0% { transform: translateX(-50px); }
+            100% { transform: translateX(320px); }
+        }
+
+        /* Sun and Moon inside toggle */
+        .celestial-body {
+            position: absolute;
+            border-radius: 50%;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sun {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #FFD700 0%, #FFA500 100%);
+            top: 20%;
+            right: 15%;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .toggle.night .sun {
+            opacity: 0;
+            transform: scale(0.3) translateY(100px);
+        }
+
+        .moon {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #F5F5DC 0%, #E6E6FA 100%);
+            top: 25%;
+            right: 18%;
+            box-shadow: 0 0 15px rgba(245, 245, 220, 0.4);
+            opacity: 0;
+            transform: scale(0.3) translateY(-100px);
+            position: relative;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(200, 200, 220, 0.3);
+            top: 25%;
+            left: 30%;
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(200, 200, 220, 0.2);
+            top: 60%;
+            right: 30%;
+        }
+
+        .toggle.night .moon {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Toggle slider ball */
+        .toggle-slider {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .toggle.night .toggle-slider {
+            transform: translateX(140px);
+            background: rgba(20, 20, 40, 0.8);
+        }
+
+        /* Icon inside slider */
+        .toggle-icon {
+            width: 40px;
+            height: 40px;
+            transition: all 0.5s ease;
+        }
+
+        .sun-icon {
+            color: #FFD700;
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        .moon-icon {
+            color: #E6E6FA;
+            opacity: 0;
+            transform: rotate(180deg) scale(0);
+            position: absolute;
+        }
+
+        .toggle.night .sun-icon {
+            opacity: 0;
+            transform: rotate(-180deg) scale(0);
+        }
+
+        .toggle.night .moon-icon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        /* Mini sun rays inside slider */
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 50%;
+            border-style: dashed;
+            animation: rotate 10s linear infinite;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .toggle.night .toggle-slider::before {
+            opacity: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Stars container inside toggle */
+        .stars-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="toggle-container">
+        <button class="toggle" id="themeToggle" aria-label="Toggle day/night">
+            <div class="stars-container" id="starsContainer"></div>
+            
+            <!-- Clouds -->
+            <div class="cloud cloud1"></div>
+            <div class="cloud cloud2"></div>
+            
+            <!-- Sun and Moon -->
+            <div class="celestial-body sun"></div>
+            <div class="celestial-body moon"></div>
+            
+            <!-- Slider -->
+            <div class="toggle-slider">
+                <!-- Sun Icon -->
+                <svg class="toggle-icon sun-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+                </svg>
+                <!-- Moon Icon -->
+                <svg class="toggle-icon moon-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" clip-rule="evenodd" />
+                </svg>
+            </div>
+        </button>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const starsContainer = document.getElementById('starsContainer');
+
+        // Create random stars inside toggle
+        function createStars() {
+            for (let i = 0; i < 30; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 2 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        // Toggle functionality
+        themeToggle.addEventListener('click', () => {
+            themeToggle.classList.toggle('night');
+        });
+
+        // Keyboard support
+        themeToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                themeToggle.click();
+            }
+        });
+    </script>
+</body>
+</html>
